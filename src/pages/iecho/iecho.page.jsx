@@ -6,25 +6,27 @@ import _ from './../../utilities'
 import './iecho.style.css'
 
 
-function IechoPage() {
-  const [responses, setResponses] = useState([])
+function IechoPage(props) {
+  
+  const { responses = [], setResponses = () => {} } = { ...props }
 
   const onFetchSucces = (resp = {}) => {
     const { data = {} } = { ...resp }
-    const auxResponses = [...responses]
-    auxResponses.unshift(data)
-    setResponses(auxResponses)
+    setResponses(data)
   }
   
   const onFetchError = (error = {}) => {
-    console.log('error', error)
+    const { response: { data = {}, status } } = { ...error }
+    const { error: message } = { ...data  }
+    const alertMessage = `Error ${status}: ${message}`
+    alert(alertMessage)
   }
   
-  const onInvert = (text = "") => {
+  const onInvert = (text = '') => {
     const { api: { basePath, inverTextPath } } = {  ...constants }
     const { fetchApi } = { ..._ }
     const apiUrl = `${basePath}${inverTextPath}?text=${text}`
-    !!text && fetchApi.GET(apiUrl)
+    fetchApi.GET(apiUrl)
       .then(onFetchSucces)
       .catch(onFetchError)
   }
@@ -37,4 +39,4 @@ function IechoPage() {
   )
 }
 
-export default IechoPage;
+export default IechoPage
