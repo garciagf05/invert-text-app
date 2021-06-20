@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './navbar.style.css'
 
-function NavbarComponent() {
+function NavbarComponent(props) {
+  const { onInvert = () => {} } = { ...props }
+  const [inputValue, setInputValue] = useState('')
+
   return (
-    <nav class="navbar navbar-light">
+    <nav className="navbar navbar-ligh mb-5">
       <form className="w-100">
         <div className="row">
           <div className="col-sm-5 offset-sm-3 mb-1">
@@ -13,11 +16,13 @@ function NavbarComponent() {
               placeholder="Escribe la palabra que deseas invertir"
               aria-label="Invert"
               aria-describedby="invert-text"
+              onChange={event => setInputValue(event.target.value)}
             />
           </div>
           <div className="col-sm-3">
             <button className="btn btn-primary btn-md"
-              type="submit">
+              type="button"
+              onClick={() => onInvert(inputValue)}>
               Invertir
             </button>
           </div>
